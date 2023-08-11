@@ -4,7 +4,7 @@
 % from a point P to a line (I0,u) in the 3D space, and the coordinates
 % of its projection, H.
 %
-% Author & support : nicolas.douillet (at) free.fr, 2019-2020.
+% Author & support : nicolas.douillet (at) free.fr, 2019-2023.
 %
 %% Syntax
 %
@@ -54,9 +54,9 @@ P = [1 0 0];
 %% Example #2
 % 2D
 
-I0 = [1 -1];
+I0 = [1 -1 0];
 u = I0;
-P = [1 0];
+P = [1 0 0];
 [d2H, H] = point_to_line_distance(P, u, I0) % expected distance : 0.5*sqrt(2) 
 
 %% Example #3
