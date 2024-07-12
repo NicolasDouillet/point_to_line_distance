@@ -1,9 +1,9 @@
 function [d2H, H] = point_to_line_distance(P, u, I0)
-% point_to_line_distance : function to compute the distance
+%% point_to_line_distance : function to compute the distance
 % between the 3D point P and the line (I0,u) in the 3D space, and the coordinates
 % of its projection, H.
 %
-% Author & support : nicolas.douillet (at) free.fr, 2019-2023.
+% Author : nicolas.douillet (at) free.fr, 2019-2024.
 %
 %
 % Syntax
@@ -67,7 +67,7 @@ function [d2H, H] = point_to_line_distance(P, u, I0)
 % [d2H, H] = point_to_line_distance(P, u, I0) % expected distance column vector : [5; 10]
 
 
-% Inputs parsing
+%% Inputs parsing
 assert(nargin > 2,'Not enough input arguments.');
 assert(nargin < 4,'Too many input arguments.')
 
@@ -82,7 +82,7 @@ assert(size(u,2) == size(P,2),'Inputs P, u, and I0 must avec the same number of 
 assert(isreal(P) && isreal(u) && isreal(I0),'Input argument P, u, and I0 must be real.');
 
 
-% Body
+%% Body
 t_H = (u(1)*(P(:,1)-repmat(I0(1),[nb_pts,1])) + ...
        u(2)*(P(:,2)-repmat(I0(2),[nb_pts,1])) + ...
        u(3)*(P(:,3)-repmat(I0(3),[nb_pts,1])) ) / ...
@@ -101,7 +101,7 @@ H(:,3) = z_H;
 
 
 % Distance
-d2H = sqrt(sum((P-H).^2,2));
+d2H = vecnorm((P-H)',2)';
 H = H(:,1:size(P,2));
 
 
