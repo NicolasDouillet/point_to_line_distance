@@ -4,7 +4,7 @@
 % from a point P to a line (I0,u) in the 3D space, and the coordinates
 % of its projection, H.
 %
-% Author : nicolas.douillet (at) free.fr, 2019-2024.
+% Author : nicolas.douillet9 (at) gmail.com, 2019-2024.
 %
 %% Syntax
 %
