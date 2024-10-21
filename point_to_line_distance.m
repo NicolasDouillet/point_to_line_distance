@@ -3,7 +3,7 @@ function [d2H, H] = point_to_line_distance(P, u, I0)
 % between the 3D point P and the line (I0,u) in the 3D space, and the coordinates
 % of its projection, H.
 %
-% Author : nicolas.douillet9 (at) gmail.com, 2019-2024.
+% Author : nicolas.douillet (at) free.fr, 2019-2024.
 %
 %
 % Syntax
@@ -51,9 +51,9 @@ function [d2H, H] = point_to_line_distance(P, u, I0)
 %
 % Example #2
 % 2D
-% I0 = [1 -1 0];
+% I0 = [1 -1];
 % u = I0;
-% P = [1 0 0];
+% P = [1 0];
 % [d2H, H] = point_to_line_distance(P, u, I0) % expected distance : 0.5*sqrt(2)
 %
 %
@@ -71,38 +71,38 @@ function [d2H, H] = point_to_line_distance(P, u, I0)
 assert(nargin > 2,'Not enough input arguments.');
 assert(nargin < 4,'Too many input arguments.')
 
-nb_pts = size(P,1);
+[nb_pts, nbdim] = size(P);
+
+% assert(nbdim > 1 && nbdim < 4,'Handled dimensions 2 and 3 only')
 
 assert((isequal(size(u),size(I0),[1,3]) || ...
         isequal(size(u),size(I0),[1,2])) && ...        
         isequal(ndims(P),ndims(u),2),...
-        'Inputs u and P must have the same format (size, number of elments, and be of dimension 2).');
+        'Inputs P, u and I0 must have the same format (size, number of elements), and be of dimension either 2 or 3).');
     
 assert(size(u,2) == size(P,2),'Inputs P, u, and I0 must avec the same number of columns.');
 assert(isreal(P) && isreal(u) && isreal(I0),'Input argument P, u, and I0 must be real.');
 
 
 %% Body
-t_H = (u(1)*(P(:,1)-repmat(I0(1),[nb_pts,1])) + ...
-       u(2)*(P(:,2)-repmat(I0(2),[nb_pts,1])) + ...
-       u(3)*(P(:,3)-repmat(I0(3),[nb_pts,1])) ) / ...
-       sum(u.^2); 
+if nbdim == 2
+    
+    t_H = (u(1)*(P(:,1)-repmat(I0(1),[nb_pts,1])) + ...
+           u(2)*(P(:,2)-repmat(I0(2),[nb_pts,1]))) / ...
+           sum(u.^2);
+    
+elseif nbdim == 3
+    
+    t_H = (u(1)*(P(:,1)-repmat(I0(1),[nb_pts,1])) + ...
+           u(2)*(P(:,2)-repmat(I0(2),[nb_pts,1])) + ...
+           u(3)*(P(:,3)-repmat(I0(3),[nb_pts,1])) ) / ...
+           sum(u.^2);
 
-x_H = I0(1) + t_H*u(1);
-y_H = I0(2) + t_H*u(2);
-z_H = I0(3) + t_H*u(3);
-
-
-% Orthogonal projected point
-H = zeros(size(P));
-H(:,1) = x_H;
-H(:,2) = y_H;
-H(:,3) = z_H;
-
+end
 
 % Distance
-d2H = vecnorm((P-H)',2)';
-H = H(:,1:size(P,2));
+H = I0 + t_H*u;
+d2H = sqrt(sum((P-H).^2,2));
 
 
 end % point_to_line_distance
